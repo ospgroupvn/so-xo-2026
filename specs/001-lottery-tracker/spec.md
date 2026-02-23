@@ -87,6 +87,15 @@ Tất cả người dùng có thể xem dashboard hiển thị kết quả quay 
 - **Người dùng nhập sai định dạng**: Bộ số không đủ 3 chữ số, có ký tự không hợp lệ, hoặc số âm, hiển thị thông báo lỗi cụ thể
 - **Thông báo trùng lặp**: Nếu cùng một người trúng nhiều giải trong các lần fetch khác nhau, chỉ thông báo một lần cho mỗi giải
 
+## Clarifications
+
+### Session 2026-02-23
+
+- Q: Dữ liệu vé số và kết quả cần được lưu trữ như thế nào? → A: Cloudflare KV
+- Q: Cơ chế trigger lấy kết quả quay số vào lúc 18h10 (GMT+7) nên được thực hiện như thế nào? → A: Node.js cron job (node-cron)
+- Q: Chi tiết về validation vé số trùng lặp: Cần kiểm tra trùng như thế nào? → A: Kiểm tra cả 2 bộ số trùng khớp hoàn toàn (123 456 = 123 456)
+- Q: Cơ chế real-time update cho dashboard nên được thực hiện như thế nào? → A: HTTP polling (mỗi 5-10 giây)
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -96,7 +105,7 @@ Tất cả người dùng có thể xem dashboard hiển thị kết quả quay 
 - **FR-003**: Hệ thống PHẢI validation vé số:
   - Mỗi chữ số từ 0 đến 9 (không có số âm, không có ký tự)
   - Mỗi bộ phải đủ 3 chữ số
-  - Vé số không được trùng với người khác đã đăng ký
+  - Vé số không được trùng với người khác đã đăng ký (kiểm tra cả 2 bộ số trùng khớp hoàn toàn, ví dụ: 123 456 = 123 456)
 - **FR-004**: Hệ thống PHẢI tự động lấy kết quả xổ số vào lúc 18h10 (GMT+7) các ngày quay số bằng cách:
   - Sử dụng HTTP request đến https://xskt.com.vn/xsmax3d
   - Bóc tách thẻ HTML có class "box-ketqua" đầu tiên
@@ -118,6 +127,18 @@ Tất cả người dùng có thể xem dashboard hiển thị kết quả quay 
 - **FR-010**: Hệ thống PHẢI hiển thị dashboard công khai với kết quả quay số và tất cả vé số đã đăng ký
 - **FR-011**: Dashboard PHẢI cập nhật thời gian thực khi có kết quả mới (request polling)
 - **FR-012**: Hệ thống PHẢI hiển thị kết quả của ngày quay số hôm đó, không cần dữ liệu ngày trước
+
+### Technical Constraints
+
+- **TC-001**: Hệ thống PHẢI sử dụng Cloudflare KV làm storage layer cho:
+  - Lưu trữ vé số người dùng (participants, tickets)
+  - Lưu trữ kết quả quay số (draw results)
+  - Cache tạm thời cho real-time updates
+- **TC-002**: Backend PHẢI được triển khai dưới dạng Node.js service với node-cron để xử lý scheduled jobs
+- **TC-003**: Dữ liệu trong KV có TTL (time-to-live) phù hợp với chu kỳ quay số (ví dụ: 24h)
+- **TC-004**: Node.js cron job PHẢI được cấu hình với timezone Asia/Ho_Chi_Minh (GMT+7) và chạy vào lúc 18:10 các ngày có quay số
+- **TC-005**: Cron job PHẢI duy trì state trong bộ nhớ (in-memory) trong suốt phiên làm việc, với khả năng persist vào KV khi cần recover
+- **TC-006**: Dashboard PHẢI sử dụng HTTP polling với interval 5-10 giây để cập nhật kết quả thời gian thực
 
 ### Key Entities
 
@@ -145,6 +166,7 @@ Tất cả người dùng có thể xem dashboard hiển thị kết quả quay 
 - Tất cả dữ liệu là công khai, không yêu cầu bảo mật riêng tư
 - Số lượng người dùng và vé số nhỏ (dưới 100 người, dưới 500 vé)
 - Người dùng không cần đăng nhập/đăng ký tài khoản
+- Cloudflare KV namespace được cấu hình sẵn cho môi trường deployment
 
 ## Out of Scope
 
@@ -153,3 +175,33 @@ Tất cả người dùng có thể xem dashboard hiển thị kết quả quay 
 - Thông báo qua email, SMS, push notification
 - Ứng dụng di động native
 - Thanh toán hoặc tính năng tài chính
+
+## Recommended Features (Best Practices)
+
+Dựa trên phân tích spec và best practices cho hệ thống theo dõi xổ số, dưới đây là các tính năng được đề xuất thêm:
+
+### P1 - Nên có cho MVP
+
+1. **Health Check Endpoint**: API endpoint `/health` để kiểm tra trạng thái hệ thống, phục vụ monitoring và alerting khi service down.
+
+2. **Manual Fetch Trigger**: Nút "Fetch kết quả" trên dashboard cho phép trigger thủ công việc lấy kết quả (hữu ích khi cron job thất bại hoặc test).
+
+3. **Input Sanitization**: Làm sạch tên người dùng (trim whitespace, giới hạn độ dài, filter ký tự đặc biệt) để tránh XSS và hiển thị không mong muốn.
+
+4. **Rate Limiting**: Giới hạn số lượng request đăng ký vé số từ cùng một IP (ví dụ: 10 vé/phút) để ngăn spam.
+
+### P2 - Tăng trải nghiệm
+
+5. **Sound Notification**: Âm thanh thông báo khi có người trúng giải (có thể bật/tắt), tăng trải nghiệm hồi hộp.
+
+6. **Progress Indicator**: Hiển thị tiến trình quay số (ví dụ: "Đã lấy 5/20 bộ số") để người dùng biết trạng thái.
+
+7. **Error Recovery UI**: Thông báo rõ ràng khi hệ thống gặp lỗi (webhook fail, network error) với gợi ý hành động.
+
+8. **Copy Results Button**: Cho phép copy kết quả trúng giải để chia sẻ dễ dàng.
+
+### P3 - Nice to have
+
+9. **Dark Mode**: Chế độ tối cho trải nghiệm xem buổi tối (thời điểm quay số 18h10).
+
+10. **Responsive Design**: Tối ưu giao diện cho mobile browser (không phải native app).

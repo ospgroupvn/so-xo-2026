@@ -32,8 +32,20 @@
   "hotPaths": [
     {
       "path": "specs/001-lottery-tracker/spec.md",
-      "accessCount": 14,
-      "lastAccessed": 1771834825102,
+      "accessCount": 31,
+      "lastAccessed": 1771837399451,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/tasks.md",
+      "accessCount": 15,
+      "lastAccessed": 1771839244994,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/contracts/api.md",
+      "accessCount": 7,
+      "lastAccessed": 1771837783807,
       "type": "file"
     },
     {
@@ -43,9 +55,27 @@
       "type": "file"
     },
     {
+      "path": "specs/001-lottery-tracker/plan.md",
+      "accessCount": 6,
+      "lastAccessed": 1771837762814,
+      "type": "file"
+    },
+    {
       "path": ".claude/commands/speckit.implement.md",
       "accessCount": 5,
       "lastAccessed": 1771833580648,
+      "type": "file"
+    },
+    {
+      "path": ".specify/memory/constitution.md",
+      "accessCount": 5,
+      "lastAccessed": 1771835954157,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/research.md",
+      "accessCount": 5,
+      "lastAccessed": 1771837774106,
       "type": "file"
     },
     {
@@ -73,9 +103,9 @@
       "type": "file"
     },
     {
-      "path": ".specify/memory/constitution.md",
+      "path": "src/app.ts",
       "accessCount": 4,
-      "lastAccessed": 1771833802241,
+      "lastAccessed": 1771838936553,
       "type": "file"
     },
     {
@@ -88,6 +118,24 @@
       "path": ".claude/commands/speckit.taskstoissues.md",
       "accessCount": 3,
       "lastAccessed": 1771833307018,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/data-model.md",
+      "accessCount": 3,
+      "lastAccessed": 1771837762800,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/quickstart.md",
+      "accessCount": 3,
+      "lastAccessed": 1771837774114,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/contracts/webhook.md",
+      "accessCount": 3,
+      "lastAccessed": 1771837783812,
       "type": "file"
     },
     {
@@ -109,6 +157,18 @@
       "type": "file"
     },
     {
+      "path": ".specify/templates/tasks-template.md",
+      "accessCount": 2,
+      "lastAccessed": 1771837452326,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/checklists/requirements.md",
+      "accessCount": 2,
+      "lastAccessed": 1771837774094,
+      "type": "file"
+    },
+    {
       "path": ".specify/templates/constitution-template.md",
       "accessCount": 1,
       "lastAccessed": 1771833543041,
@@ -121,15 +181,153 @@
       "type": "file"
     },
     {
-      "path": ".specify/templates/tasks-template.md",
+      "path": "src/types/entities.ts",
       "accessCount": 1,
-      "lastAccessed": 1771833558175,
+      "lastAccessed": 1771838101867,
       "type": "file"
     },
     {
-      "path": "specs/001-lottery-tracker/checklists/requirements.md",
+      "path": "src/services/kv.ts",
       "accessCount": 1,
-      "lastAccessed": 1771834157219,
+      "lastAccessed": 1771838158526,
+      "type": "file"
+    },
+    {
+      "path": "src/utils/validation.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838159713,
+      "type": "file"
+    },
+    {
+      "path": "src/utils/logger.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838160633,
+      "type": "file"
+    },
+    {
+      "path": "src/middleware/adminAuth.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838245329,
+      "type": "file"
+    },
+    {
+      "path": "src/index.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838262406,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/health.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838263235,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/services/api.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838344604,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/hooks/usePolling.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838345659,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/ui/input-otp.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771838377656,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/lib/utils.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838378718,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/layout/Layout.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771838379781,
+      "type": "file"
+    },
+    {
+      "path": "src/models/participant.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838495494,
+      "type": "file"
+    },
+    {
+      "path": "src/models/ticket.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838496551,
+      "type": "file"
+    },
+    {
+      "path": "src/services/ticketService.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838520027,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/tickets.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838521304,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/TicketInput.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771838603115,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/TicketCard.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771838604165,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/pages/RegisterPage.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1771838605203,
+      "type": "file"
+    },
+    {
+      "path": "src/models/drawResult.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838689858,
+      "type": "file"
+    },
+    {
+      "path": "src/services/scraper.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838739576,
+      "type": "file"
+    },
+    {
+      "path": "src/services/scheduler.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838740634,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/results.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838741912,
+      "type": "file"
+    },
+    {
+      "path": "src/models/winNotification.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838846300,
+      "type": "file"
+    },
+    {
+      "path": "src/services/matcher.ts",
+      "accessCount": 1,
+      "lastAccessed": 1771838847570,
       "type": "file"
     }
   ],
