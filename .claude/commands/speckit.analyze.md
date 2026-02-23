@@ -1,184 +1,184 @@
 ---
-description: Perform a non-destructive cross-artifact consistency and quality analysis across spec.md, plan.md, and tasks.md after task generation.
+description: Thực hiện phân tích tính nhất quán và chất lượng phi phá hủy trên các artifact: spec.md, plan.md và tasks.md sau khi tạo tasks.
 ---
 
-## User Input
+## Đầu vào của người dùng
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+Bạn **BẮT BUỘC** phải xem xét đầu vào của người dùng trước khi tiếp tục (nếu không rỗng).
 
-## Goal
+## Mục tiêu
 
-Identify inconsistencies, duplications, ambiguities, and underspecified items across the three core artifacts (`spec.md`, `plan.md`, `tasks.md`) before implementation. This command MUST run only after `/speckit.tasks` has successfully produced a complete `tasks.md`.
+Nhận diện các điểm không nhất quán, trùng lặp, mơ hồ và thiếu cụ thể trong ba artifact chính (`spec.md`, `plan.md`, `tasks.md`) trước khi triển khai. Lệnh này CHỈ được chạy sau khi `/speckit.tasks` đã tạo thành công một file `tasks.md` hoàn chỉnh.
 
-## Operating Constraints
+## Ràng buộc thực thi
 
-**STRICTLY READ-ONLY**: Do **not** modify any files. Output a structured analysis report. Offer an optional remediation plan (user must explicitly approve before any follow-up editing commands would be invoked manually).
+**CHỈ ĐỌC - KHÔNG GHI**: **Không** được sửa đổi bất kỳ file nào. Xuất báo cáo phân tích có cấu trúc. Đề xuất kế hoạch khắc phục tùy chọn (người dùng phải phê duyệt rõ ràng trước khi bất kỳ lệnh chỉnh sửa tiếp theo nào được gọi thủ công).
 
-**Constitution Authority**: The project constitution (`.specify/memory/constitution.md`) is **non-negotiable** within this analysis scope. Constitution conflicts are automatically CRITICAL and require adjustment of the spec, plan, or tasks—not dilution, reinterpretation, or silent ignoring of the principle. If a principle itself needs to change, that must occur in a separate, explicit constitution update outside `/speckit.analyze`.
+**Thẩm quyền hiến pháp**: Hiến pháp dự án (`.specify/memory/constitution.md`) **không thể thương lượng** trong phạm vi phân tích này. Xung đột với hiến pháp tự động được coi là NGHIÊM TRỌNG và yêu cầu điều chỉnh spec, plan hoặc tasks — không được pha loãng, diễn giải lại hoặc lặng lẽ bỏ qua nguyên tắc. Nếu chính một nguyên tắc cần thay đổi, điều đó phải diễn ra trong bản cập nhật hiến pháp riêng biệt, rõ ràng bên ngoài `/speckit.analyze`.
 
-## Execution Steps
+## Các bước thực thi
 
-### 1. Initialize Analysis Context
+### 1. Khởi tạo ngữ cảnh phân tích
 
-Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` once from repo root and parse JSON for FEATURE_DIR and AVAILABLE_DOCS. Derive absolute paths:
+Chạy `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` một lần từ thư mục gốc của repo và phân tích JSON để lấy FEATURE_DIR và AVAILABLE_DOCS. Suy ra đường dẫn tuyệt đối:
 
 - SPEC = FEATURE_DIR/spec.md
 - PLAN = FEATURE_DIR/plan.md
 - TASKS = FEATURE_DIR/tasks.md
 
-Abort with an error message if any required file is missing (instruct the user to run missing prerequisite command).
-For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+Hủy bỏ với thông báo lỗi nếu bất kỳ file bắt buộc nào bị thiếu (hướng dẫn người dùng chạy lệnh điều kiện tiên quyết bị thiếu).
+Đối với dấu nháy đơn trong tham số như "I'm Groot", sử dụng cú pháp escape: ví dụ 'I'\''m Groot' (hoặc dùng dấu nháy kép nếu có thể: "I'm Groot").
 
-### 2. Load Artifacts (Progressive Disclosure)
+### 2. Tải artifacts (Tiết lộ tiến dần)
 
-Load only the minimal necessary context from each artifact:
+Chỉ tải ngữ cảnh tối thiểu cần thiết từ mỗi artifact:
 
-**From spec.md:**
+**Từ spec.md:**
 
-- Overview/Context
-- Functional Requirements
-- Non-Functional Requirements
-- User Stories
-- Edge Cases (if present)
+- Tổng quan/ngữ cảnh
+- Yêu cầu chức năng
+- Yêu cầu phi chức năng
+- User stories
+- Các trường hợp ngoại lệ (nếu có)
 
-**From plan.md:**
+**Từ plan.md:**
 
-- Architecture/stack choices
-- Data Model references
-- Phases
-- Technical constraints
+- Lựa chọn kiến trúc/stack
+- Tham chiếu mô hình dữ liệu
+- Các giai đoạn
+- Ràng buộc kỹ thuật
 
-**From tasks.md:**
+**Từ tasks.md:**
 
-- Task IDs
-- Descriptions
-- Phase grouping
-- Parallel markers [P]
-- Referenced file paths
+- ID của task
+- Mô tả
+- Phân nhóm theo giai đoạn
+- Marker song song [P]
+- Đường dẫn file được tham chiếu
 
-**From constitution:**
+**Từ hiến pháp:**
 
-- Load `.specify/memory/constitution.md` for principle validation
+- Tải `.specify/memory/constitution.md` để xác thực nguyên tắc
 
-### 3. Build Semantic Models
+### 3. Xây dựng mô hình ngữ nghĩa
 
-Create internal representations (do not include raw artifacts in output):
+Tạo các biểu diễn nội bộ (không bao gồm artifact gốc trong đầu ra):
 
-- **Requirements inventory**: Each functional + non-functional requirement with a stable key (derive slug based on imperative phrase; e.g., "User can upload file" → `user-can-upload-file`)
-- **User story/action inventory**: Discrete user actions with acceptance criteria
-- **Task coverage mapping**: Map each task to one or more requirements or stories (inference by keyword / explicit reference patterns like IDs or key phrases)
-- **Constitution rule set**: Extract principle names and MUST/SHOULD normative statements
+- **Danh mục yêu cầu**: Mỗi yêu cầu chức năng + phi chức năng với một key ổn định (suy ra slug dựa trên mệnh lệnh; ví dụ, "User can upload file" → `user-can-upload-file`)
+- **Danh mục user story/hành động**: Các hành động người dùng rời rạc với tiêu chí chấp nhận
+- **Ánh xạ phủ sóng task**: Ánh xạ mỗi task tới một hoặc nhiều yêu cầu hoặc story (suy ra bằng từ khóa / mẫu tham chiếu rõ ràng như ID hoặc cụm từ khóa)
+- **Bộ quy tắc hiến pháp**: Trích xuất tên nguyên tắc và câu mệnh đề MUST/SHOULD
 
-### 4. Detection Passes (Token-Efficient Analysis)
+### 4. Các lượt phát hiện (Phân tích hiệu quả về token)
 
-Focus on high-signal findings. Limit to 50 findings total; aggregate remainder in overflow summary.
+Tập trung vào phát hiện có tín hiệu cao. Giới hạn 50 phát hiện tổng cộng; gom phần còn lại vào tóm tắt bổ sung.
 
-#### A. Duplication Detection
+#### A. Phát hiện trùng lặp
 
-- Identify near-duplicate requirements
-- Mark lower-quality phrasing for consolidation
+- Nhận diện yêu cầu gần như trùng lặp
+- Đánh dấu cách diễn đạt chất lượng thấp để hợp nhất
 
-#### B. Ambiguity Detection
+#### B. Phát hiện tính mơ hồ
 
-- Flag vague adjectives (fast, scalable, secure, intuitive, robust) lacking measurable criteria
-- Flag unresolved placeholders (TODO, TKTK, ???, `<placeholder>`, etc.)
+- Gắn cờ các tính từ mơ hồ (nhanh, có thể mở rộng, bảo mật, trực quan, mạnh mẽ) thiếu tiêu chí đo lường
+- Gắn cờ các placeholder chưa giải quyết (TODO, TKTK, ???, `<placeholder>`, v.v.)
 
-#### C. Underspecification
+#### C. Thiếu cụ thể hóa
 
-- Requirements with verbs but missing object or measurable outcome
-- User stories missing acceptance criteria alignment
-- Tasks referencing files or components not defined in spec/plan
+- Yêu cầu có động từ nhưng thiếu đối tượng hoặc kết quả đo lường được
+- User stories thiếu sự liên kết tiêu chí chấp nhận
+- Tasks tham chiếu file hoặc component không được định nghĩa trong spec/plan
 
-#### D. Constitution Alignment
+#### D. Liên kết với hiến pháp
 
-- Any requirement or plan element conflicting with a MUST principle
-- Missing mandated sections or quality gates from constitution
+- Bất kỳ yêu cầu hoặc yếu tố plan nào xung đột với nguyên tắc MUST
+- Thiếu phần bắt buộc hoặc cổng chất lượng từ hiến pháp
 
-#### E. Coverage Gaps
+#### E. Khoảng trống phủ sóng
 
-- Requirements with zero associated tasks
-- Tasks with no mapped requirement/story
-- Non-functional requirements not reflected in tasks (e.g., performance, security)
+- Yêu cầu không có task liên quan
+- Tasks không ánh xạ tới yêu cầu/story nào
+- Yêu cầu phi chức năng không được phản ánh trong tasks (ví dụ: hiệu suất, bảo mật)
 
-#### F. Inconsistency
+#### F. Tính không nhất quán
 
-- Terminology drift (same concept named differently across files)
-- Data entities referenced in plan but absent in spec (or vice versa)
-- Task ordering contradictions (e.g., integration tasks before foundational setup tasks without dependency note)
-- Conflicting requirements (e.g., one requires Next.js while other specifies Vue)
+- Trôi thuật ngữ (cùng khái niệm được đặt tên khác nhau trên các file)
+- Thực thể dữ liệu được tham chiếu trong plan nhưng không có trong spec (hoặc ngược lại)
+- Mâu thuẫn thứ tự task (ví dụ: task tích hợp trước khi task thiết lập nền tảng không có ghi chú dependency)
+- Yêu cầu xung đột (ví dụ: một yêu cầu Next.js trong khi yêu cầu khác chỉ định Vue)
 
-### 5. Severity Assignment
+### 5. Gán mức độ nghiêm trọng
 
-Use this heuristic to prioritize findings:
+Sử dụng heuristic này để ưu tiên phát hiện:
 
-- **CRITICAL**: Violates constitution MUST, missing core spec artifact, or requirement with zero coverage that blocks baseline functionality
-- **HIGH**: Duplicate or conflicting requirement, ambiguous security/performance attribute, untestable acceptance criterion
-- **MEDIUM**: Terminology drift, missing non-functional task coverage, underspecified edge case
-- **LOW**: Style/wording improvements, minor redundancy not affecting execution order
+- **NGHIÊM TRỌNG**: Vi phạm MUST của hiến pháp, thiếu artifact spec cốt lõi, hoặc yêu cầu có phủ sóng bằng không gây chặn chức năng cơ bản
+- **CAO**: Yêu cầu trùng lặp hoặc xung đột, thuộc tính bảo mật/hiệu suất mơ hồ, tiêu chí chấp nhận không thể kiểm thử
+- **TRUNG BÌNH**: Trôi thuật ngữ, thiếu phủ sóng task phi chức năng, trường hợp ngoại lệ thiếu cụ thể
+- **THẤP**: Cải tiến kiểu/lời văn, dư thừa nhỏ không ảnh hưởng thứ tự thực thi
 
-### 6. Produce Compact Analysis Report
+### 6. Tạo báo cáo phân tích compact
 
-Output a Markdown report (no file writes) with the following structure:
+Xuất báo cáo Markdown (không ghi file) với cấu trúc sau:
 
-## Specification Analysis Report
+## Báo cáo phân tích đặc tả
 
-| ID | Category | Severity | Location(s) | Summary | Recommendation |
-|----|----------|----------|-------------|---------|----------------|
-| A1 | Duplication | HIGH | spec.md:L120-134 | Two similar requirements ... | Merge phrasing; keep clearer version |
+| ID | Danh mục | Mức độ | Vị trí | Tóm tắt | Khuyến nghị |
+|----|----------|---------|--------|---------|-------------|
+| A1 | Trùng lặp | CAO | spec.md:L120-134 | Hai yêu cầu tương tự... | Hợp nhất cách diễn đạt; giữ phiên bản rõ hơn |
 
-(Add one row per finding; generate stable IDs prefixed by category initial.)
+(Thêm một dòng cho mỗi phát hiện; tạo ID ổn định có tiền tố là chữ cái đầu của danh mục.)
 
-**Coverage Summary Table:**
+**Bảng tóm tắt phủ sóng:**
 
-| Requirement Key | Has Task? | Task IDs | Notes |
-|-----------------|-----------|----------|-------|
+| Key yêu cầu | Có task? | ID task | Ghi chú |
+|-------------|----------|---------|---------|
 
-**Constitution Alignment Issues:** (if any)
+**Vấn đề liên kết hiến pháp:** (nếu có)
 
-**Unmapped Tasks:** (if any)
+**Tasks không được ánh xạ:** (nếu có)
 
-**Metrics:**
+**Số liệu:**
 
-- Total Requirements
-- Total Tasks
-- Coverage % (requirements with >=1 task)
-- Ambiguity Count
-- Duplication Count
-- Critical Issues Count
+- Tổng yêu cầu
+- Tổng task
+- % phủ sóng (yêu cầu có >=1 task)
+- Số lượng mơ hồ
+- Số lượng trùng lặp
+- Số vấn đề nghiêm trọng
 
-### 7. Provide Next Actions
+### 7. Cung cấp hành động tiếp theo
 
-At end of report, output a concise Next Actions block:
+Ở cuối báo cáo, xuất khối Hành động tiếp theo ngắn gọn:
 
-- If CRITICAL issues exist: Recommend resolving before `/speckit.implement`
-- If only LOW/MEDIUM: User may proceed, but provide improvement suggestions
-- Provide explicit command suggestions: e.g., "Run /speckit.specify with refinement", "Run /speckit.plan to adjust architecture", "Manually edit tasks.md to add coverage for 'performance-metrics'"
+- Nếu có vấn đề NGHIÊM TRỌNG: Khuyến nghị giải quyết trước `/speckit.implement`
+- Nếu chỉ có THẤP/TRUNG BÌNH: Người dùng có thể tiếp tục, nhưng cung cấp đề xuất cải tiến
+- Cung cấp gợi ý lệnh rõ ràng: ví dụ, "Chạy /speckit.specify với tinh chỉnh", "Chạy /speckit.plan để điều chỉnh kiến trúc", "Chỉnh sửa tasks.md thủ công để thêm phủ sóng cho 'performance-metrics'"
 
-### 8. Offer Remediation
+### 8. Đề xuất khắc phục
 
-Ask the user: "Would you like me to suggest concrete remediation edits for the top N issues?" (Do NOT apply them automatically.)
+Hỏi người dùng: "Bạn có muốn tôi đề xuất các chỉnh sửa khắc phục cụ thể cho N vấn đề hàng đầu không?" (KHÔNG tự động áp dụng chúng.)
 
-## Operating Principles
+## Nguyên tắc vận hành
 
-### Context Efficiency
+### Hiệu quả ngữ cảnh
 
-- **Minimal high-signal tokens**: Focus on actionable findings, not exhaustive documentation
-- **Progressive disclosure**: Load artifacts incrementally; don't dump all content into analysis
-- **Token-efficient output**: Limit findings table to 50 rows; summarize overflow
-- **Deterministic results**: Rerunning without changes should produce consistent IDs and counts
+- **Token tín hiệu cao tối thiểu**: Tập trung vào phát hiện có thể hành động, không phải tài liệu toàn diện
+- **Tiết lộ tiến dần**: Tải artifact tăng dần; không đổ toàn bộ nội dung vào phân tích
+- **Đầu ra tiết kiệm token**: Giới hạn bảng phát hiện 50 dòng; tóm tắt phần bổ sung
+- **Kết quả xác định**: Chạy lại mà không có thay đổi sẽ tạo ra ID và số lượng nhất quán
 
-### Analysis Guidelines
+### Hướng dẫn phân tích
 
-- **NEVER modify files** (this is read-only analysis)
-- **NEVER hallucinate missing sections** (if absent, report them accurately)
-- **Prioritize constitution violations** (these are always CRITICAL)
-- **Use examples over exhaustive rules** (cite specific instances, not generic patterns)
-- **Report zero issues gracefully** (emit success report with coverage statistics)
+- **KHÔNG BAO GIỜ sửa đổi file** (đây là phân tích chỉ đọc)
+- **KHÔNG BAO GIỜ bịa ra phần bị thiếu** (nếu vắng mặt, báo cáo chính xác)
+- **Ưu tiên vi phạm hiến pháp** (đây luôn là NGHIÊM TRỌNG)
+- **Sử dụng ví dụ thay vì quy tắc toàn diện** (trích dẫn trường hợp cụ thể, không phải mẫu chung)
+- **Báo cáo零 vấn đề một cách khéo léo** (xuất báo cáo thành công với số liệu thống kê phủ sóng)
 
-## Context
+## Ngữ cảnh
 
 $ARGUMENTS

@@ -1,0 +1,137 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1771832628504,
+  "projectRoot": "/Users/namnguyenhoai/code/poc/so-khop-xo-so/so-xo-2026",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {},
+  "hotPaths": [
+    {
+      "path": "specs/001-lottery-tracker/spec.md",
+      "accessCount": 14,
+      "lastAccessed": 1771834825102,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.tasks.md",
+      "accessCount": 6,
+      "lastAccessed": 1771833306976,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.implement.md",
+      "accessCount": 5,
+      "lastAccessed": 1771833580648,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.checklist.md",
+      "accessCount": 4,
+      "lastAccessed": 1771833306994,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.constitution.md",
+      "accessCount": 4,
+      "lastAccessed": 1771833307010,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.plan.md",
+      "accessCount": 4,
+      "lastAccessed": 1771833575351,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.specify.md",
+      "accessCount": 4,
+      "lastAccessed": 1771833580655,
+      "type": "file"
+    },
+    {
+      "path": ".specify/memory/constitution.md",
+      "accessCount": 4,
+      "lastAccessed": 1771833802241,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.analyze.md",
+      "accessCount": 3,
+      "lastAccessed": 1771833307001,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.taskstoissues.md",
+      "accessCount": 3,
+      "lastAccessed": 1771833307018,
+      "type": "file"
+    },
+    {
+      "path": ".claude/commands/speckit.clarify.md",
+      "accessCount": 2,
+      "lastAccessed": 1771832755514,
+      "type": "file"
+    },
+    {
+      "path": ".specify/templates/spec-template.md",
+      "accessCount": 2,
+      "lastAccessed": 1771833884974,
+      "type": "file"
+    },
+    {
+      "path": "docs/requirement.md",
+      "accessCount": 2,
+      "lastAccessed": 1771833884979,
+      "type": "file"
+    },
+    {
+      "path": ".specify/templates/constitution-template.md",
+      "accessCount": 1,
+      "lastAccessed": 1771833543041,
+      "type": "file"
+    },
+    {
+      "path": ".specify/templates/plan-template.md",
+      "accessCount": 1,
+      "lastAccessed": 1771833558159,
+      "type": "file"
+    },
+    {
+      "path": ".specify/templates/tasks-template.md",
+      "accessCount": 1,
+      "lastAccessed": 1771833558175,
+      "type": "file"
+    },
+    {
+      "path": "specs/001-lottery-tracker/checklists/requirements.md",
+      "accessCount": 1,
+      "lastAccessed": 1771834157219,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

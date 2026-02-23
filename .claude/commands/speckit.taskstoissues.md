@@ -1,30 +1,30 @@
 ---
-description: Convert existing tasks into actionable, dependency-ordered GitHub issues for the feature based on available design artifacts.
+description: Chuyển đổi các task đã có thành GitHub issues có thể thực hiện được, được sắp xếp theo thứ tự phụ thuộc cho tính năng dựa trên các tài liệu thiết kế có sẵn.
 tools: ['github/github-mcp-server/issue_write']
 ---
 
-## User Input
+## Đầu vào của người dùng
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+Bạn **BẮT BUỘC** phải xem xét đầu vào của người dùng trước khi tiếp tục (nếu không rỗng).
 
-## Outline
+## Tóm tắt các bước
 
-1. Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
-1. From the executed script, extract the path to **tasks**.
-1. Get the Git remote by running:
+1. Chạy lệnh `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` từ thư mục gốc của repo và phân tích FEATURE_DIR cùng danh sách AVAILABLE_DOCS. Tất cả đường dẫn phải là đường dẫn tuyệt đối. Với các dấu ngoặc đơn trong tham số như "I'm Groot", hãy sử dụng cú pháp escape: ví dụ 'I'\''m Groot' (hoặc dùng dấu ngoặc kép nếu có thể: "I'm Groot").
+1. Từ kết quả script đã chạy, trích xuất đường dẫn đến **tasks**.
+1. Lấy Git remote bằng cách chạy:
 
 ```bash
 git config --get remote.origin.url
 ```
 
 > [!CAUTION]
-> ONLY PROCEED TO NEXT STEPS IF THE REMOTE IS A GITHUB URL
+> CHỈ TIẾP TỤC CÁC BƯỚC TIẾP THEO NẾU REMOTE LÀ URL CỦA GITHUB
 
-1. For each task in the list, use the GitHub MCP server to create a new issue in the repository that is representative of the Git remote.
+1. Với từng task trong danh sách, sử dụng GitHub MCP server để tạo issue mới trong repository tương ứng với Git remote đó.
 
 > [!CAUTION]
-> UNDER NO CIRCUMSTANCES EVER CREATE ISSUES IN REPOSITORIES THAT DO NOT MATCH THE REMOTE URL
+> TUYỆT ĐỐI KHÔNG TẠO ISSUES TRONG CÁC REPOSITORY KHÔNG KHỚP VỚI REMOTE URL

@@ -1,80 +1,80 @@
 ---
-description: Execute the implementation plan by processing and executing all tasks defined in tasks.md
+description: Thực thi kế hoạch triển khai bằng cách xử lý và thực thi tất cả các task được định nghĩa trong tasks.md
 ---
 
-## User Input
+## Đầu vào của người dùng
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+Bạn **BẮT BUỘC** phải xem xét đầu vào của người dùng trước khi tiếp tục (nếu không rỗng).
 
-## Outline
+## Tóm tắt quy trình
 
-1. Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+1. Chạy lệnh `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` từ thư mục gốc của repo và phân tích FEATURE_DIR cùng danh sách AVAILABLE_DOCS. Tất cả đường dẫn phải là đường dẫn tuyệt đối. Đối với dấu nháy đơn trong tham số như "I'm Groot", hãy sử dụng cú pháp escape: ví dụ 'I'\''m Groot' (hoặc dùng dấu nháy kép nếu có thể: "I'm Groot").
 
-2. **Check checklists status** (if FEATURE_DIR/checklists/ exists):
-   - Scan all checklist files in the checklists/ directory
-   - For each checklist, count:
-     - Total items: All lines matching `- [ ]` or `- [X]` or `- [x]`
-     - Completed items: Lines matching `- [X]` or `- [x]`
-     - Incomplete items: Lines matching `- [ ]`
-   - Create a status table:
+2. **Kiểm tra trạng thái checklist** (nếu FEATURE_DIR/checklists/ tồn tại):
+   - Quét tất cả các file checklist trong thư mục checklists/
+   - Đối với mỗi checklist, đếm:
+     - Tổng số mục: Tất cả dòng khớp với `- [ ]` hoặc `- [X]` hoặc `- [x]`
+     - Mục đã hoàn thành: Dòng khớp với `- [X]` hoặc `- [x]`
+     - Mục chưa hoàn thành: Dòng khớp với `- [ ]`
+   - Tạo bảng trạng thái:
 
      ```text
-     | Checklist | Total | Completed | Incomplete | Status |
-     |-----------|-------|-----------|------------|--------|
-     | ux.md     | 12    | 12        | 0          | ✓ PASS |
-     | test.md   | 8     | 5         | 3          | ✗ FAIL |
-     | security.md | 6   | 6         | 0          | ✓ PASS |
+     | Checklist | Tổng | Đã hoàn thành | Chưa hoàn thành | Trạng thái |
+     |-----------|-------|---------------|-----------------|------------|
+     | ux.md     | 12    | 12            | 0               | ✓ ĐẠT      |
+     | test.md   | 8     | 5             | 3               | ✗ KHÔNG ĐẠT |
+     | security.md | 6   | 6             | 0               | ✓ ĐẠT      |
      ```
 
-   - Calculate overall status:
-     - **PASS**: All checklists have 0 incomplete items
-     - **FAIL**: One or more checklists have incomplete items
+   - Tính toán trạng thái tổng thể:
+     - **ĐẠT (PASS)**: Tất cả checklist có 0 mục chưa hoàn thành
+     - **KHÔNG ĐẠT (FAIL)**: Một hoặc nhiều checklist có mục chưa hoàn thành
 
-   - **If any checklist is incomplete**:
-     - Display the table with incomplete item counts
-     - **STOP** and ask: "Some checklists are incomplete. Do you want to proceed with implementation anyway? (yes/no)"
-     - Wait for user response before continuing
-     - If user says "no" or "wait" or "stop", halt execution
-     - If user says "yes" or "proceed" or "continue", proceed to step 3
+   - **Nếu bất kỳ checklist nào chưa hoàn thành**:
+     - Hiển thị bảng với số lượng mục chưa hoàn thành
+     - **DỪNG LẠI** và hỏi: "Một số checklist chưa hoàn thành. Bạn có muốn tiếp tục triển khai anyway? (yes/no)"
+     - Chờ phản hồi từ người dùng trước khi tiếp tục
+     - Nếu người dùng nói "no" hoặc "wait" hoặc "stop", dừng thực thi
+     - Nếu người dùng nói "yes" hoặc "proceed" hoặc "continue", tiếp tục đến bước 3
 
-   - **If all checklists are complete**:
-     - Display the table showing all checklists passed
-     - Automatically proceed to step 3
+   - **Nếu tất cả checklist đã hoàn thành**:
+     - Hiển thị bảng cho thấy tất cả checklist đã đạt
+     - Tự động tiếp tục đến bước 3
 
-3. Load and analyze the implementation context:
-   - **REQUIRED**: Read tasks.md for the complete task list and execution plan
-   - **REQUIRED**: Read plan.md for tech stack, architecture, and file structure
-   - **IF EXISTS**: Read data-model.md for entities and relationships
-   - **IF EXISTS**: Read contracts/ for API specifications and test requirements
-   - **IF EXISTS**: Read research.md for technical decisions and constraints
-   - **IF EXISTS**: Read quickstart.md for integration scenarios
+3. Tải và phân tích ngữ cảnh triển khai:
+   - **BẮT BUỘC**: Đọc tasks.md để lấy danh sách task hoàn chỉnh và kế hoạch thực thi
+   - **BẮT BUỘC**: Đọc plan.md để hiểu tech stack, kiến trúc và cấu trúc file
+   - **NẾU TỒN TẠI**: Đọc data-model.md để hiểu các thực thể và mối quan hệ
+   - **NẾU TỒN TẠI**: Đọc contracts/ để hiểu các đặc tả API và yêu cầu kiểm thử
+   - **NẾU TỒN TẠI**: Đọc research.md để hiểu các quyết định kỹ thuật và ràng buộc
+   - **NẾU TỒN TẠI**: Đọc quickstart.md để hiểu các kịch bản tích hợp
 
-4. **Project Setup Verification**:
-   - **REQUIRED**: Create/verify ignore files based on actual project setup:
+4. **Xác thực thiết lập dự án**:
+   - **BẮT BUỘC**: Tạo/xác minh các file ignore dựa trên thiết lập thực tế của dự án:
 
-   **Detection & Creation Logic**:
-   - Check if the following command succeeds to determine if the repository is a git repo (create/verify .gitignore if so):
+   **Logic phát hiện & tạo**:
+   - Kiểm tra xem lệnh sau có thành công hay không để xác định repository có phải là git repo hay không (tạo/xác minh .gitignore nếu đúng):
 
      ```sh
      git rev-parse --git-dir 2>/dev/null
      ```
 
-   - Check if Dockerfile* exists or Docker in plan.md → create/verify .dockerignore
-   - Check if .eslintrc* exists → create/verify .eslintignore
-   - Check if eslint.config.* exists → ensure the config's `ignores` entries cover required patterns
-   - Check if .prettierrc* exists → create/verify .prettierignore
-   - Check if .npmrc or package.json exists → create/verify .npmignore (if publishing)
-   - Check if terraform files (*.tf) exist → create/verify .terraformignore
-   - Check if .helmignore needed (helm charts present) → create/verify .helmignore
+   - Kiểm tra Dockerfile* có tồn tại hoặc Docker có trong plan.md → tạo/xác minh .dockerignore
+   - Kiểm tra .eslintrc* có tồn tại → tạo/xác minh .eslintignore
+   - Kiểm tra eslint.config.* có tồn tại → đảm bảo các mục `ignores` trong config bao phủ các pattern cần thiết
+   - Kiểm tra .prettierrc* có tồn tại → tạo/xác minh .prettierignore
+   - Kiểm tra .npmrc hoặc package.json có tồn tại → tạo/xác minh .npmignore (nếu đang publish)
+   - Kiểm tra file terraform (*.tf) có tồn tại → tạo/xác minh .terraformignore
+   - Kiểm tra .helmignore có cần thiết hay không (có helm charts) → tạo/xác minh .helmignore
 
-   **If ignore file already exists**: Verify it contains essential patterns, append missing critical patterns only
-   **If ignore file missing**: Create with full pattern set for detected technology
+   **Nếu file ignore đã tồn tại**: Xác minh nó chứa các pattern cần thiết, chỉ thêm các pattern quan trọng bị thiếu
+   **Nếu file ignore bị thiếu**: Tạo với bộ pattern đầy đủ cho công nghệ đã phát hiện
 
-   **Common Patterns by Technology** (from plan.md tech stack):
+   **Các pattern phổ biến theo công nghệ** (từ tech stack trong plan.md):
    - **Node.js/JavaScript/TypeScript**: `node_modules/`, `dist/`, `build/`, `*.log`, `.env*`
    - **Python**: `__pycache__/`, `*.pyc`, `.venv/`, `venv/`, `dist/`, `*.egg-info/`
    - **Java**: `target/`, `*.class`, `*.jar`, `.gradle/`, `build/`
@@ -88,48 +88,48 @@ You **MUST** consider the user input before proceeding (if not empty).
    - **C**: `build/`, `bin/`, `obj/`, `out/`, `*.o`, `*.a`, `*.so`, `*.exe`, `Makefile`, `config.log`, `.idea/`, `*.log`, `.env*`
    - **Swift**: `.build/`, `DerivedData/`, `*.swiftpm/`, `Packages/`
    - **R**: `.Rproj.user/`, `.Rhistory`, `.RData`, `.Ruserdata`, `*.Rproj`, `packrat/`, `renv/`
-   - **Universal**: `.DS_Store`, `Thumbs.db`, `*.tmp`, `*.swp`, `.vscode/`, `.idea/`
+   - **Phổ quát (Universal)**: `.DS_Store`, `Thumbs.db`, `*.tmp`, `*.swp`, `.vscode/`, `.idea/`
 
-   **Tool-Specific Patterns**:
+   **Pattern cụ thể theo công cụ**:
    - **Docker**: `node_modules/`, `.git/`, `Dockerfile*`, `.dockerignore`, `*.log*`, `.env*`, `coverage/`
    - **ESLint**: `node_modules/`, `dist/`, `build/`, `coverage/`, `*.min.js`
    - **Prettier**: `node_modules/`, `dist/`, `build/`, `coverage/`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
    - **Terraform**: `.terraform/`, `*.tfstate*`, `*.tfvars`, `.terraform.lock.hcl`
    - **Kubernetes/k8s**: `*.secret.yaml`, `secrets/`, `.kube/`, `kubeconfig*`, `*.key`, `*.crt`
 
-5. Parse tasks.md structure and extract:
-   - **Task phases**: Setup, Tests, Core, Integration, Polish
-   - **Task dependencies**: Sequential vs parallel execution rules
-   - **Task details**: ID, description, file paths, parallel markers [P]
-   - **Execution flow**: Order and dependency requirements
+5. Phân tích cấu trúc tasks.md và trích xuất:
+   - **Các giai đoạn task**: Thiết lập, Kiểm thử, Phần lõi, Tích hợp, Hoàn thiện
+   - **Phụ thuộc task**: Quy tắc thực thi tuần tự song song
+   - **Chi tiết task**: ID, mô tả, đường dẫn file, markers song song [P]
+   - **Quy trình thực thi**: Thứ tự và yêu cầu phụ thuộc
 
-6. Execute implementation following the task plan:
-   - **Phase-by-phase execution**: Complete each phase before moving to the next
-   - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together  
-   - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
-   - **File-based coordination**: Tasks affecting the same files must run sequentially
-   - **Validation checkpoints**: Verify each phase completion before proceeding
+6. Thực thi triển khai theo kế hoạch task:
+   - **Thực thi theo từng giai đoạn**: Hoàn thành từng giai đoạn trước khi chuyển sang giai đoạn tiếp theo
+   - **Tôn trọng phụ thuộc**: Chạy các task tuần tự theo thứ tự, các task song song [P] có thể chạy cùng lúc
+   - **Theo hướng tiếp cận TDD**: Thực thi các task kiểm thử trước các task triển khai tương ứng
+   - **Phối hợp dựa trên file**: Các task ảnh hưởng đến cùng file phải chạy tuần tự
+   - **Điểm kiểm tra xác thực**: Xác nhận sự hoàn thành của từng giai đoạn trước khi tiếp tục
 
-7. Implementation execution rules:
-   - **Setup first**: Initialize project structure, dependencies, configuration
-   - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
-   - **Core development**: Implement models, services, CLI commands, endpoints
-   - **Integration work**: Database connections, middleware, logging, external services
-   - **Polish and validation**: Unit tests, performance optimization, documentation
+7. Quy tắc thực thi triển khai:
+   - **Thiết lập trước tiên**: Khởi tạo cấu trúc dự án, dependencies, cấu hình
+   - **Kiểm thử trước code**: Nếu cần viết kiểm thử cho contracts, entities và kịch bản tích hợp
+   - **Phát triển phần lõi**: Triển khai models, services, CLI commands, endpoints
+   - **Công việc tích hợp**: Kết nối database, middleware, logging, external services
+   - **Hoàn thiện và xác thực**: Unit tests, tối ưu hóa hiệu suất, tài liệu hóa
 
-8. Progress tracking and error handling:
-   - Report progress after each completed task
-   - Halt execution if any non-parallel task fails
-   - For parallel tasks [P], continue with successful tasks, report failed ones
-   - Provide clear error messages with context for debugging
-   - Suggest next steps if implementation cannot proceed
-   - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
+8. Theo dõi tiến độ và xử lý lỗi:
+   - Báo cáo tiến độ sau mỗi task hoàn thành
+   - Dừng thực thi nếu bất kỳ task không song song nào thất bại
+   - Đối với các task song song [P], tiếp tục với các task thành công, báo cáo các task thất bại
+   - Cung cấp thông báo lỗi rõ ràng với ngữ cảnh để debug
+   - Đề xuất bước tiếp theo nếu triển khai không thể tiếp tục
+   - **QUAN TRỌNG** Đối với các task đã hoàn thành, đảm bảo đánh dấu task là [X] trong file tasks.
 
-9. Completion validation:
-   - Verify all required tasks are completed
-   - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
-   - Confirm the implementation follows the technical plan
-   - Report final status with summary of completed work
+9. Xác thực hoàn thành:
+   - Xác minh tất cả các task bắt buộc đã hoàn thành
+   - Kiểm tra các tính năng đã triển khai khớp với đặc tả gốc
+   - Xác thực rằng các bài kiểm thử pass và độ phủ đáp ứng yêu cầu
+   - Xác nhận triển khai tuân theo kế hoạch kỹ thuật
+   - Báo cáo trạng thái cuối cùng với tóm tắt công việc đã hoàn thành
 
-Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit.tasks` first to regenerate the task list.
+Lưu ý: Lệnh này giả định rằng một sự phân bổ task hoàn chỉnh tồn tại trong tasks.md. Nếu các task chưa hoàn chỉnh hoặc bị thiếu, đề xuất chạy `/speckit.tasks` trước để tạo lại danh sách task.

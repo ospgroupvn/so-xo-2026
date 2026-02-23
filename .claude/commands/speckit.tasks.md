@@ -1,137 +1,137 @@
 ---
-description: Generate an actionable, dependency-ordered tasks.md for the feature based on available design artifacts.
-handoffs: 
-  - label: Analyze For Consistency
+description: Tạo file tasks.md có thể thực hiện được, được sắp xếp theo thứ tự phụ thuộc cho tính năng dựa trên các tài liệu thiết kế có sẵn.
+handoffs:
+  - label: Phân Tính Tính Nhất Quán
     agent: speckit.analyze
-    prompt: Run a project analysis for consistency
+    prompt: Chạy phân tích dự án để kiểm tra tính nhất quán
     send: true
-  - label: Implement Project
+  - label: Triển Khai Dự Án
     agent: speckit.implement
-    prompt: Start the implementation in phases
+    prompt: Bắt đầu triển khai theo từng giai đoạn
     send: true
 ---
 
-## User Input
+## Đầu Vào Của Người Dùng
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+Bạn **BẮT BUỘC** phải xem xét đầu vào của người dùng trước khi tiếp tục (nếu không rỗng).
 
-## Outline
+## Tóm Tắt Quy Trình
 
-1. **Setup**: Run `.specify/scripts/bash/check-prerequisites.sh --json` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+1. **Thiết lập**: Chạy `.specify/scripts/bash/check-prerequisites.sh --json` từ thư mục gốc repo và phân tích FEATURE_DIR và danh sách AVAILABLE_DOCS. Tất cả đường dẫn phải là đường dẫn tuyệt đối. Với dấu nháy đơn trong tham số như "I'm Groot", sử dụng cú pháp escape: ví dụ 'I'\''m Groot' (hoặc dùng nháy kép nếu có thể: "I'm Groot").
 
-2. **Load design documents**: Read from FEATURE_DIR:
-   - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
-   - **Optional**: data-model.md (entities), contracts/ (interface contracts), research.md (decisions), quickstart.md (test scenarios)
-   - Note: Not all projects have all documents. Generate tasks based on what's available.
+2. **Tải tài liệu thiết kế**: Đọc từ FEATURE_DIR:
+   - **Bắt buộc**: plan.md (tech stack, thư viện, cấu trúc), spec.md (user stories với mức độ ưu tiên)
+   - **Tùy chọn**: data-model.md (thực thể), contracts/ (hợp đồng giao diện), research.md (quyết định), quickstart.md (kịch bản kiểm thử)
+   - Lưu ý: Không phải tất cả dự án đều có đầy đủ tài liệu. Tạo tasks dựa trên những gì có sẵn.
 
-3. **Execute task generation workflow**:
-   - Load plan.md and extract tech stack, libraries, project structure
-   - Load spec.md and extract user stories with their priorities (P1, P2, P3, etc.)
-   - If data-model.md exists: Extract entities and map to user stories
-   - If contracts/ exists: Map interface contracts to user stories
-   - If research.md exists: Extract decisions for setup tasks
-   - Generate tasks organized by user story (see Task Generation Rules below)
-   - Generate dependency graph showing user story completion order
-   - Create parallel execution examples per user story
-   - Validate task completeness (each user story has all needed tasks, independently testable)
+3. **Thực thi quy trình tạo task**:
+   - Tải plan.md và trích xuất tech stack, thư viện, cấu trúc dự án
+   - Tải spec.md và trích xuất user stories với mức độ ưu tiên của chúng (P1, P2, P3, v.v.)
+   - Nếu data-model.md tồn tại: Trích xuất các thực thể và ánh xạ đến user stories
+   - Nếu contracts/ tồn tại: Ánh xạ các hợp đồng giao diện đến user stories
+   - Nếu research.md tồn tại: Trích xuất các quyết định cho tasks thiết lập
+   - Tạo task được tổ chức theo user story (xem Quy Tắc Tạo Task bên dưới)
+   - Tạo đồ thị phụ thuộc hiển thị thứ tự hoàn thành user story
+   - Tạo ví dụ thực thi song song cho mỗi user story
+   - Kiểm tra tính đầy đủ của task (mỗi user story có tất cả task cần thiết, có thể kiểm thử độc lập)
 
-4. **Generate tasks.md**: Use `.specify/templates/tasks-template.md` as structure, fill with:
-   - Correct feature name from plan.md
-   - Phase 1: Setup tasks (project initialization)
-   - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
-   - Phase 3+: One phase per user story (in priority order from spec.md)
-   - Each phase includes: story goal, independent test criteria, tests (if requested), implementation tasks
-   - Final Phase: Polish & cross-cutting concerns
-   - All tasks must follow the strict checklist format (see Task Generation Rules below)
-   - Clear file paths for each task
-   - Dependencies section showing story completion order
-   - Parallel execution examples per story
-   - Implementation strategy section (MVP first, incremental delivery)
+4. **Tạo tasks.md**: Sử dụng `.specify/templates/tasks-template.md` làm cấu trúc, điền vào:
+   - Tên tính năng chính xác từ plan.md
+   - Giai đoạn 1: Tasks thiết lập (khởi tạo dự án)
+   - Giai đoạn 2: Tasks nền tảng (điều kiện tiên quyết chặn tất cả user stories)
+   - Giai đoạn 3+: Một giai đoạn cho mỗi user story (theo thứ tự ưu tiên từ spec.md)
+   - Mỗi giai đoạn bao gồm: mục tiêu story, tiêu chí kiểm thử độc lập, kiểm thử (nếu được yêu cầu), tasks triển khai
+   - Giai đoạn cuối: Hoàn thiện & các mối quan tâm xuyên suốt
+   - Tất cả tasks phải tuân theo định dạng checklist nghiêm ngặt (xem Quy Tắc Tạo Task bên dưới)
+   - Đường dẫn file rõ ràng cho mỗi task
+   - Phần Dependencies hiển thị thứ tự hoàn thành story
+   - Ví dụ thực thi song song cho mỗi story
+   - Phần chiến lược triển khai (MVP trước, giao tiếp tăng dần)
 
-5. **Report**: Output path to generated tasks.md and summary:
-   - Total task count
-   - Task count per user story
-   - Parallel opportunities identified
-   - Independent test criteria for each story
-   - Suggested MVP scope (typically just User Story 1)
-   - Format validation: Confirm ALL tasks follow the checklist format (checkbox, ID, labels, file paths)
+5. **Báo cáo**: Xuất đường dẫn đến tasks.md đã tạo và tóm tắt:
+   - Tổng số task
+   - Số task cho mỗi user story
+   - Cơ hội thực thi song song được xác định
+   - Tiêu chí kiểm thử độc lập cho mỗi story
+   - Phạm vi MVP đề xuất (thường chỉ là User Story 1)
+   - Kiểm tra định dạng: Xác nhận TẤT CẢ tasks tuân theo định dạng checklist (checkbox, ID, nhãn, đường dẫn file)
 
-Context for task generation: $ARGUMENTS
+Ngữ cảnh cho việc tạo task: $ARGUMENTS
 
-The tasks.md should be immediately executable - each task must be specific enough that an LLM can complete it without additional context.
+File tasks.md nên có thể thực thi ngay lập tức - mỗi task phải đủ cụ thể để LLM có thể hoàn thành mà không cần ngữ cảnh bổ sung.
 
-## Task Generation Rules
+## Quy Tắc Tạo Task
 
-**CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
+**QUAN TRỌNG**: Tasks PHẢI được tổ chức theo user story để cho phép triển khai và kiểm thử độc lập.
 
-**Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature specification or if user requests TDD approach.
+**Kiểm thử là TÙY CHỌN**: Chỉ tạo task kiểm thử nếu được yêu cầu rõ ràng trong đặc tả tính năng hoặc nếu người dùng yêu cầu tiếp cận TDD.
 
-### Checklist Format (REQUIRED)
+### Định Dạng Checklist (BẮT BUỘC)
 
-Every task MUST strictly follow this format:
+Mọi task PHẢI tuân thủ nghiêm ngặt định dạng này:
 
 ```text
-- [ ] [TaskID] [P?] [Story?] Description with file path
+- [ ] [TaskID] [P?] [Story?] Mô tả với đường dẫn file
 ```
 
-**Format Components**:
+**Các thành phần định dạng**:
 
-1. **Checkbox**: ALWAYS start with `- [ ]` (markdown checkbox)
-2. **Task ID**: Sequential number (T001, T002, T003...) in execution order
-3. **[P] marker**: Include ONLY if task is parallelizable (different files, no dependencies on incomplete tasks)
-4. **[Story] label**: REQUIRED for user story phase tasks only
-   - Format: [US1], [US2], [US3], etc. (maps to user stories from spec.md)
-   - Setup phase: NO story label
-   - Foundational phase: NO story label  
-   - User Story phases: MUST have story label
-   - Polish phase: NO story label
-5. **Description**: Clear action with exact file path
+1. **Checkbox**: LUÔN LUÔN bắt đầu bằng `- [ ]` (markdown checkbox)
+2. **Task ID**: Số thứ tự (T001, T002, T003...) theo thứ tự thực thi
+3. **Đánh dấu [P]**: Chỉ bao gồm nếu task có thể thực thi song song (khác file, không phụ thuộc vào tasks chưa hoàn thành)
+4. **Nhãn [Story]**: BẮT BUỘC chỉ cho tasks của giai đoạn user story
+   - Định dạng: [US1], [US2], [US3], v.v. (ánh xạ đến user stories từ spec.md)
+   - Giai đoạn Setup: KHÔNG có nhãn story
+   - Giai đoạn Foundational: KHÔNG có nhãn story
+   - Giai đoạn User Story: PHẢI có nhãn story
+   - Giai đoạn Polish: KHÔNG có nhãn story
+5. **Mô tả**: Hành động rõ ràng với đường dẫn file chính xác
 
-**Examples**:
+**Ví dụ**:
 
-- ✅ CORRECT: `- [ ] T001 Create project structure per implementation plan`
-- ✅ CORRECT: `- [ ] T005 [P] Implement authentication middleware in src/middleware/auth.py`
-- ✅ CORRECT: `- [ ] T012 [P] [US1] Create User model in src/models/user.py`
-- ✅ CORRECT: `- [ ] T014 [US1] Implement UserService in src/services/user_service.py`
-- ❌ WRONG: `- [ ] Create User model` (missing ID and Story label)
-- ❌ WRONG: `T001 [US1] Create model` (missing checkbox)
-- ❌ WRONG: `- [ ] [US1] Create User model` (missing Task ID)
-- ❌ WRONG: `- [ ] T001 [US1] Create model` (missing file path)
+- ✅ ĐÚNG: `- [ ] T001 Tạo cấu trúc dự án theo kế hoạch triển khai`
+- ✅ ĐÚNG: `- [ ] T005 [P] Triển khai authentication middleware trong src/middleware/auth.py`
+- ✅ ĐÚNG: `- [ ] T012 [P] [US1] Tạo User model trong src/models/user.py`
+- ✅ ĐÚNG: `- [ ] T014 [US1] Triển khai UserService trong src/services/user_service.py`
+- ❌ SAI: `- [ ] Tạo User model` (thiếu ID và nhãn Story)
+- ❌ SAI: `T001 [US1] Tạo model` (thiếu checkbox)
+- ❌ SAI: `- [ ] [US1] Tạo User model` (thiếu Task ID)
+- ❌ SAI: `- [ ] T001 [US1] Tạo model` (thiếu đường dẫn file)
 
-### Task Organization
+### Tổ Chức Task
 
-1. **From User Stories (spec.md)** - PRIMARY ORGANIZATION:
-   - Each user story (P1, P2, P3...) gets its own phase
-   - Map all related components to their story:
-     - Models needed for that story
-     - Services needed for that story
-     - Interfaces/UI needed for that story
-     - If tests requested: Tests specific to that story
-   - Mark story dependencies (most stories should be independent)
+1. **Từ User Stories (spec.md)** - TỔ CHỨC CHÍNH:
+   - Mỗi user story (P1, P2, P3...) có giai đoạn riêng
+   - Ánh xạ tất cả thành phần liên quan đến story của chúng:
+     - Models cần thiết cho story đó
+     - Services cần thiết cho story đó
+     - Giao diện/UI cần thiết cho story đó
+     - Nếu kiểm thử được yêu cầu: Kiểm thử riêng cho story đó
+   - Đánh dấu phụ thuộc story (hầu hết stories nên độc lập)
 
-2. **From Contracts**:
-   - Map each interface contract → to the user story it serves
-   - If tests requested: Each interface contract → contract test task [P] before implementation in that story's phase
+2. **Từ Contracts**:
+   - Ánh xạ mỗi hợp đồng giao diện → đến user story mà nó phục vụ
+   - Nếu kiểm thử được yêu cầu: Mỗi hợp đồng giao diện → task kiểm thử hợp đồng [P] trước khi triển khai trong giai đoạn story đó
 
-3. **From Data Model**:
-   - Map each entity to the user story(ies) that need it
-   - If entity serves multiple stories: Put in earliest story or Setup phase
-   - Relationships → service layer tasks in appropriate story phase
+3. **Từ Data Model**:
+   - Ánh xạ mỗi thực thể đến (các) user story cần nó
+   - Nếu thực thể phục vụ nhiều stories: Đặt trong story sớm nhất hoặc giai đoạn Setup
+   - Mối quan hệ → tasks lớp service trong giai đoạn story phù hợp
 
-4. **From Setup/Infrastructure**:
-   - Shared infrastructure → Setup phase (Phase 1)
-   - Foundational/blocking tasks → Foundational phase (Phase 2)
-   - Story-specific setup → within that story's phase
+4. **Từ Setup/Infrastructure**:
+   - Hạ tầng dùng chung → Giai đoạn Setup (Giai đoạn 1)
+   - Tasks nền tảng/chặn → Giai đoạn Foundational (Giai đoạn 2)
+   - Thiết lập riêng cho story → trong giai đoạn story đó
 
-### Phase Structure
+### Cấu Trúc Giai Đoạn
 
-- **Phase 1**: Setup (project initialization)
-- **Phase 2**: Foundational (blocking prerequisites - MUST complete before user stories)
-- **Phase 3+**: User Stories in priority order (P1, P2, P3...)
-  - Within each story: Tests (if requested) → Models → Services → Endpoints → Integration
-  - Each phase should be a complete, independently testable increment
-- **Final Phase**: Polish & Cross-Cutting Concerns
+- **Giai đoạn 1**: Setup (khởi tạo dự án)
+- **Giai đoạn 2**: Foundational (điều kiện tiên quyết chặn - PHẢI hoàn thành trước user stories)
+- **Giai đoạn 3+**: User Stories theo thứ tự ưu tiên (P1, P2, P3...)
+  - Trong mỗi story: Kiểm thử (nếu được yêu cầu) → Models → Services → Endpoints → Tích hợp
+  - Mỗi giai đoạn nên là một bước gia tăng hoàn chỉnh, có thể kiểm thử độc lập
+- **Giai đoạn cuối**: Hoàn thiện & Các mối quan tâm xuyên suốt
