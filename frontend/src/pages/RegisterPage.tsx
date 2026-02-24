@@ -1,12 +1,12 @@
 // RegisterPage
 // Page for registering new lottery tickets
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Layout, Header } from '@/components/layout/Layout';
 import { TicketInput } from '@/components/TicketInput';
 import { TicketList } from '@/components/TicketCard';
 import { api } from '@/services/api';
-import type { TicketListResponse, CreateTicketRequest } from '../../../src/types/entities';
+import type { TicketListResponse } from '../../../src/types/entities';
 
 export function RegisterPage() {
   const [tickets, setTickets] = useState<TicketListResponse['tickets']>([]);
@@ -31,11 +31,18 @@ export function RegisterPage() {
   );
 
   // Fetch tickets on mount and after registration
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchTickets = async () => {
-      const response = await api.getTickets({ limit: 100 });
-      if (response.success && response.data) {
-        setTickets(response.data.tickets);
+      try {
+        const response = await api.getTickets({ limit: 100 });
+        if (response.success && response.data && Array.isArray(response.data.tickets)) {
+          setTickets(response.data.tickets);
+        } else {
+          setTickets([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch tickets:', error);
+        setTickets([]);
       }
     };
     fetchTickets();

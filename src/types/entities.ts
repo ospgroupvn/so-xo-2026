@@ -1,6 +1,21 @@
 // Type definitions cho Hệ Thống Theo Dõi Xổ Số Max 3D+
 // Generated from data-model.md
 
+// Cloudflare KV Namespace type for non-Workers environments
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  interface KVNamespace {
+    get(key: string, options?: { type?: 'text' | 'json' | 'arrayBuffer' | 'stream' }): Promise<string | null>;
+    get(key: string, type: 'text'): Promise<string | null>;
+    get<Value = unknown>(key: string, type: 'json'): Promise<Value | null>;
+    get(key: string, type: 'arrayBuffer'): Promise<ArrayBuffer | null>;
+    get(key: string, type: 'stream'): Promise<ReadableStream | null>;
+    put(key: string, value: string | ReadableStream | ArrayBuffer, options?: { expirationTtl?: number; metadata?: unknown }): Promise<void>;
+    delete(key: string): Promise<void>;
+    list(options?: { prefix?: string; limit?: number; cursor?: string }): Promise<{ keys: Array<{ name: string; expiration?: number; metadata?: unknown }>; list_complete: boolean; cursor?: string }>;
+  }
+}
+
 // ==================== Participant ====================
 
 export interface Participant {

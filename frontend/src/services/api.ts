@@ -13,7 +13,8 @@ import type {
   PaginationParams,
 } from '../../../src/types/entities';
 
-const API_BASE_URL = '/api/v1';
+// @ts-ignore - Vite env
+const API_BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'https://so-khop-xo-so.namnhcntt.workers.dev/api/v1';
 
 // ==================== HTTP Client ====================
 

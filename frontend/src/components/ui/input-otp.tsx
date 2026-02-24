@@ -2,7 +2,11 @@
 // A one-time password input component
 
 import * as React from 'react';
-import { cn } from '@/lib/utils';
+
+// Utility function
+function cn(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ');
+}
 
 export interface InputOTPProps {
   maxLength: number;
@@ -63,19 +67,32 @@ export function InputOTPSlot({ index, className }: InputOTPSlotProps) {
   const { value, onChange, maxLength, disabled } = useInputOTP();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const char = value[index] || '';
+  // Safety check for value
+  const safeValue = value || '';
+  const char = safeValue[index] || '';
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (disabled) return;
 
     if (e.key === 'Backspace') {
       e.preventDefault();
-      const newValue = value.slice(0, -1);
-      onChange(newValue);
+      if (safeValue[index]) {
+        // Clear current slot
+        const newValue = safeValue.substring(0, index) + safeValue.substring(index + 1);
+        onChange(newValue);
+      } else if (index > 0) {
+        // Move to previous and clear
+        const newValue = safeValue.substring(0, index - 1);
+        onChange(newValue);
+        const prevInput = inputRef.current?.previousElementSibling as HTMLInputElement;
+        prevInput?.focus();
+      }
     } else if (e.key === 'ArrowLeft' && index > 0) {
+      e.preventDefault();
       const prevInput = inputRef.current?.previousElementSibling as HTMLInputElement;
       prevInput?.focus();
     } else if (e.key === 'ArrowRight' && index < maxLength - 1) {
+      e.preventDefault();
       const nextInput = inputRef.current?.nextElementSibling as HTMLInputElement;
       nextInput?.focus();
     }
@@ -85,17 +102,24 @@ export function InputOTPSlot({ index, className }: InputOTPSlotProps) {
     if (disabled) return;
 
     const inputValue = e.target.value;
+    // Get only the last digit entered
     const digit = inputValue.replace(/\D/g, '').slice(-1);
 
     if (digit) {
-      const newValue = value + digit;
-      if (newValue.length <= maxLength) {
-        onChange(newValue);
-        // Move to next input
-        if (index < maxLength - 1) {
-          const nextInput = inputRef.current?.nextElementSibling as HTMLInputElement;
-          nextInput?.focus();
-        }
+      // Replace or insert at current index
+      let newValue = safeValue.split('');
+      // Ensure array is long enough
+      while (newValue.length <= index) {
+        newValue.push('');
+      }
+      newValue[index] = digit;
+      const result = newValue.join('').slice(0, maxLength);
+      onChange(result);
+
+      // Move to next input
+      if (index < maxLength - 1) {
+        const nextInput = inputRef.current?.nextElementSibling as HTMLInputElement;
+        nextInput?.focus();
       }
     }
   };
@@ -148,9 +172,4 @@ export function InputOTPSeparator({ className, children }: InputOTPSeparatorProp
       {children || <span className="text-muted-foreground text-xl font-bold">-</span>}
     </div>
   );
-}
-
-// Utility function (should be in lib/utils.ts, but included here for completeness)
-export function cn(...classes: (string | boolean | undefined)[]) {
-  return classes.filter(Boolean).join(' ');
 }

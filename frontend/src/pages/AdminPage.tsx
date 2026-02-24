@@ -1,12 +1,12 @@
 // AdminPage
 // Admin interface for managing tickets
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Layout, Header, Card, CardHeader, CardTitle, CardContent, CardFooter, Badge } from '@/components/layout/Layout';
+import { useState, useEffect, useCallback } from 'react';
+import { Layout, Header, Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/layout/Layout';
 import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@/components/ui/input-otp';
 import { api } from '@/services/api';
 import { cn } from '@/lib/utils';
-import type { TicketListResponse, ApiResponse } from '../../../src/types/entities';
+import type { TicketListResponse } from '../../../src/types/entities';
 
 export function AdminPage() {
   const [adminSecret, setAdminSecret] = useState('');
@@ -52,7 +52,7 @@ export function AdminPage() {
 
     setIsLoading(true);
     try {
-      const response = await api.updateTicket(selectedTicket, editNumbers, adminSecret);
+      const response = await api.updateTicket(selectedTicket, { numbers: editNumbers }, adminSecret);
       if (response.success) {
         setMessage({ type: 'success', text: 'Cập nhật vé số thành công!' });
         // Refresh tickets

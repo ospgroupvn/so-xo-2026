@@ -40,10 +40,11 @@ function parseNumber(text: string): string {
 /**
  * Parse pair of numbers from elements
  */
-function parsePair(elements: cheerio.Cheerio): PrizePair {
+function parsePair(elements: cheerio.Cheerio<any>): PrizePair {
   const nums: string[] = [];
-  elements.each((_, el) => {
-    const text = cheerio.default(el).text().trim();
+  elements.each((_: any, el: any) => {
+    const $ = cheerio.load('');
+    const text = $(el).text().trim();
     if (text) {
       nums.push(parseNumber(text));
     }

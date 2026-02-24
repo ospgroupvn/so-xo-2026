@@ -38,8 +38,14 @@
     },
     {
       "path": "specs/001-lottery-tracker/tasks.md",
-      "accessCount": 15,
-      "lastAccessed": 1771839244994,
+      "accessCount": 19,
+      "lastAccessed": 1771840495286,
+      "type": "file"
+    },
+    {
+      "path": "src/index.ts",
+      "accessCount": 11,
+      "lastAccessed": 1771849769645,
       "type": "file"
     },
     {
@@ -139,6 +145,36 @@
       "type": "file"
     },
     {
+      "path": "src/services/matcher.ts",
+      "accessCount": 3,
+      "lastAccessed": 1771846914449,
+      "type": "file"
+    },
+    {
+      "path": "src/services/scraper.ts",
+      "accessCount": 3,
+      "lastAccessed": 1771846942140,
+      "type": "file"
+    },
+    {
+      "path": "src/middleware/adminAuth.ts",
+      "accessCount": 3,
+      "lastAccessed": 1771849678954,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/ui/input-otp.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1771858944741,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/TicketCard.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1771860320014,
+      "type": "file"
+    },
+    {
       "path": ".claude/commands/speckit.clarify.md",
       "accessCount": 2,
       "lastAccessed": 1771832755514,
@@ -169,6 +205,24 @@
       "type": "file"
     },
     {
+      "path": "src/services/kv.ts",
+      "accessCount": 2,
+      "lastAccessed": 1771849692038,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/components/TicketInput.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1771858898610,
+      "type": "file"
+    },
+    {
+      "path": "frontend/src/pages/RegisterPage.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1771860275254,
+      "type": "file"
+    },
+    {
       "path": ".specify/templates/constitution-template.md",
       "accessCount": 1,
       "lastAccessed": 1771833543041,
@@ -187,12 +241,6 @@
       "type": "file"
     },
     {
-      "path": "src/services/kv.ts",
-      "accessCount": 1,
-      "lastAccessed": 1771838158526,
-      "type": "file"
-    },
-    {
       "path": "src/utils/validation.ts",
       "accessCount": 1,
       "lastAccessed": 1771838159713,
@@ -202,18 +250,6 @@
       "path": "src/utils/logger.ts",
       "accessCount": 1,
       "lastAccessed": 1771838160633,
-      "type": "file"
-    },
-    {
-      "path": "src/middleware/adminAuth.ts",
-      "accessCount": 1,
-      "lastAccessed": 1771838245329,
-      "type": "file"
-    },
-    {
-      "path": "src/index.ts",
-      "accessCount": 1,
-      "lastAccessed": 1771838262406,
       "type": "file"
     },
     {
@@ -232,12 +268,6 @@
       "path": "frontend/src/hooks/usePolling.ts",
       "accessCount": 1,
       "lastAccessed": 1771838345659,
-      "type": "file"
-    },
-    {
-      "path": "frontend/src/components/ui/input-otp.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1771838377656,
       "type": "file"
     },
     {
@@ -277,33 +307,9 @@
       "type": "file"
     },
     {
-      "path": "frontend/src/components/TicketInput.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1771838603115,
-      "type": "file"
-    },
-    {
-      "path": "frontend/src/components/TicketCard.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1771838604165,
-      "type": "file"
-    },
-    {
-      "path": "frontend/src/pages/RegisterPage.tsx",
-      "accessCount": 1,
-      "lastAccessed": 1771838605203,
-      "type": "file"
-    },
-    {
       "path": "src/models/drawResult.ts",
       "accessCount": 1,
       "lastAccessed": 1771838689858,
-      "type": "file"
-    },
-    {
-      "path": "src/services/scraper.ts",
-      "accessCount": 1,
-      "lastAccessed": 1771838739576,
       "type": "file"
     },
     {
@@ -322,12 +328,6 @@
       "path": "src/models/winNotification.ts",
       "accessCount": 1,
       "lastAccessed": 1771838846300,
-      "type": "file"
-    },
-    {
-      "path": "src/services/matcher.ts",
-      "accessCount": 1,
-      "lastAccessed": 1771838847570,
       "type": "file"
     }
   ],

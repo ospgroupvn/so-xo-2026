@@ -1,7 +1,7 @@
 // DashboardPage
 // Main dashboard displaying tickets, results, and winners
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout, Header, Grid, Card, CardHeader, CardTitle, CardContent, Badge, Section } from '@/components/layout/Layout';
 import { TicketList } from '@/components/TicketCard';
 import { usePolling } from '@/hooks/usePolling';
@@ -92,10 +92,10 @@ export function DashboardPage() {
 
                 {/* Display results by prize */}
                 <div className="space-y-3">
-                  <PrizeRow label="Giải Nhất" numbers={results.first} />
-                  <PrizeRow label="Giải Nhì" numbers={results.second.flat()} />
-                  <PrizeRow label="Giải Ba" numbers={results.third.flat()} />
-                  <PrizeRow label="Giải Tư" numbers={results.fourth.flat()} />
+                  <PrizeRow label="Giải Nhất" numbers={results.first || []} />
+                  <PrizeRow label="Giải Nhì" numbers={(results.second || []).flat()} />
+                  <PrizeRow label="Giải Ba" numbers={(results.third || []).flat()} />
+                  <PrizeRow label="Giải Tư" numbers={(results.fourth || []).flat()} />
                 </div>
 
                 <p className="text-xs text-muted-foreground">
@@ -151,11 +151,13 @@ export function DashboardPage() {
 
 // Prize Row Component
 function PrizeRow({ label, numbers }: { label: string; numbers: string[] }) {
+  // Safety check for numbers
+  const safeNumbers = numbers || [];
   return (
     <div className="flex items-center gap-4">
       <span className="text-sm font-medium w-24">{label}:</span>
       <div className="flex gap-1 flex-wrap">
-        {numbers.filter((n) => n).map((num, idx) => (
+        {safeNumbers.filter((n) => n).map((num, idx) => (
           <span
             key={idx}
             className="px-2 py-1 bg-primary/10 rounded text-sm font-mono"

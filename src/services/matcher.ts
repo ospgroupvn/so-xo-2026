@@ -1,7 +1,8 @@
 // Matcher Service
 // Prize matching logic for Max 3D+
 
-import type { Env, Ticket, DrawResult, Prize, Participant } from '../types/entities';
+import type { Env, Ticket, DrawResult, Participant } from '../types/entities';
+import { Prize } from '../types/entities';
 import { getAllPairs } from '../models/drawResult';
 import { createWinNotification } from '../models/winNotification';
 import { getAllTickets, getParticipant, saveWinNotification, checkExistingNotification } from './kv';

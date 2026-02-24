@@ -1,1 +1,3 @@
 {"t":0,"agent":"system","event":"skill_invoked","skill_name":"speckit.implement"}
+{"t":0,"agent":"system","event":"skill_invoked","skill_name":"agent-browser:agent-browser"}
+{"t":0,"agent":"a7e5f4a","agent_type":"unknown","event":"agent_stop","success":true}

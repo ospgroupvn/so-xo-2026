@@ -1,7 +1,6 @@
 // TicketCard Component
 // Display component for showing a lottery ticket
 
-import React from 'react';
 import { cn } from '@/lib/utils';
 import { Badge } from './layout/Layout';
 
@@ -24,6 +23,11 @@ export function TicketCard({
   isWinner = false,
   className,
 }: TicketCardProps) {
+  // Safety check for numbers
+  if (!numbers || !Array.isArray(numbers) || numbers.length < 2) {
+    return null;
+  }
+
   const formattedDate = new Date(createdAt).toLocaleDateString('vi-VN', {
     day: '2-digit',
     month: '2-digit',

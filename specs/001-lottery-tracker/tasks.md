@@ -219,15 +219,15 @@
 
 ### Backend Integration Tests
 
-- [ ] T059 [P] Viết integration tests cho tickets API trong tests/integration/tickets.test.ts
-- [ ] T060 [P] Viết integration tests cho results API trong tests/integration/results.test.ts
-- [ ] T061 [P] Viết integration tests cho admin auth trong tests/integration/auth.test.ts
+- [x] T059 [P] Viết integration tests cho tickets API trong tests/integration/tickets.test.ts
+- [x] T060 [P] Viết integration tests cho results API trong tests/integration/results.test.ts
+- [x] T061 [P] Viết integration tests cho admin auth trong tests/integration/auth.test.ts
 
 ### Frontend Tests
 
-- [ ] T062 [P] Viết tests cho TicketInput component trong frontend/tests/components/TicketInput.test.tsx
-- [ ] T063 [P] Viết tests cho TicketCard component trong frontend/tests/components/TicketCard.test.tsx
-- [ ] T064 [P] Viết tests cho usePolling hook trong frontend/tests/hooks/usePolling.test.ts
+- [x] T062 [P] Viết tests cho TicketInput component trong frontend/tests/components/TicketInput.test.tsx
+- [x] T063 [P] Viết tests cho TicketCard component trong frontend/tests/components/TicketCard.test.tsx
+- [x] T064 [P] Viết tests cho usePolling hook trong frontend/tests/hooks/usePolling.test.ts
 
 ---
 
@@ -239,36 +239,36 @@
 
 ### E2E Test Setup
 
-- [ ] E001 [P] Tạo thư mục e2e/ và setup agent-browser test runner script
-- [ ] E002 [P] Viết E2E test script cho health check endpoint
+- [x] E001 [P] Tạo thư mục e2e/ và setup agent-browser test runner script
+- [x] E002 [P] Viết E2E test script cho health check endpoint
 
 ### E2E Test Cases - User Story 1 (Ticket Registration)
 
-- [ ] E003 [P] [E2E-US1] Viết test: Mở trang đăng ký, nhập vé hợp lệ, verify lưu thành công
-- [ ] E004 [P] [E2E-US1] Viết test: Nhập vé không hợp lệ (thiếu số), verify error message
-- [ ] E005 [P] [E2E-US1] Viết test: Nhập vé trùng lặp, verify duplicate error
-- [ ] E006 [P] [E2E-US1] Viết test: Navigate với keyboard (Tab, Enter) giữa các input fields
+- [x] E003 [P] [E2E-US1] Viết test: Mở trang đăng ký, nhập vé hợp lệ, verify lưu thành công
+- [x] E004 [P] [E2E-US1] Viết test: Nhập vé không hợp lệ (thiếu số), verify error message
+- [x] E005 [P] [E2E-US1] Viết test: Nhập vé trùng lặp, verify duplicate error
+- [x] E006 [P] [E2E-US1] Viết test: Navigate với keyboard (Tab, Enter) giữa các input fields
 
 ### E2E Test Cases - User Story 2 (Results Fetch)
 
-- [ ] E007 [P] [E2E-US2] Viết test: Trigger manual fetch, verify results hiển thị
-- [ ] E008 [P] [E2E-US2] Viết test: Verify progress indicator cập nhật khi fetch
+- [x] E007 [P] [E2E-US2] Viết test: Trigger manual fetch, verify results hiển thị
+- [x] E008 [P] [E2E-US2] Viết test: Verify progress indicator cập nhật khi fetch
 
 ### E2E Test Cases - User Story 3 (Matching & Notification)
 
-- [ ] E009 [P] [E2E-US3] Viết test: Setup test data với vé trùng kết quả, verify winner highlight
-- [ ] E010 [P] [E2E-US3] Viết test: Verify winner list hiển thị đúng thông tin
+- [x] E009 [P] [E2E-US3] Viết test: Setup test data với vé trùng kết quả, verify winner highlight
+- [x] E010 [P] [E2E-US3] Viết test: Verify winner list hiển thị đúng thông tin
 
 ### E2E Test Cases - User Story 4 (Dashboard)
 
-- [ ] E011 [P] [E2E-US4] Viết test: Mở dashboard, verify tất cả vé hiển thị
-- [ ] E012 [P] [E2E-US4] Viết test: Verify real-time polling cập nhật dashboard
+- [x] E011 [P] [E2E-US4] Viết test: Mở dashboard, verify tất cả vé hiển thị
+- [x] E012 [P] [E2E-US4] Viết test: Verify real-time polling cập nhật dashboard
 
 ### E2E Test Cases - Admin Features
 
-- [ ] E013 [P] [E2E-Admin] Viết test: Admin update vé với valid secret
-- [ ] E014 [P] [E2E-Admin] Viết test: Admin delete vé với valid secret
-- [ ] E015 [P] [E2E-Admin] Viết test: Admin action với invalid secret, verify 401
+- [x] E013 [P] [E2E-Admin] Viết test: Admin update vé với valid secret
+- [x] E014 [P] [E2E-Admin] Viết test: Admin delete vé với valid secret
+- [x] E015 [P] [E2E-Admin] Viết test: Admin action với invalid secret, verify 401
 
 ### E2E Test Runner Commands
 
@@ -297,10 +297,10 @@ agent-browser snapshot -i
 - [x] T065 [P] Thêm rate limiting middleware cho tickets endpoint
 - [x] T066 [P] Thêm input sanitization cho name field
 - [x] T067 [P] Tạo README.md với hướng dẫn sử dụng
-- [ ] T068 [P] Tạo deployment documentation
-- [ ] T069 [P] Verify quickstart.md workflows hoạt động đúng
-- [ ] T070 [P] Performance optimization và cleanup
-- [ ] T071 [P] Security review và hardening
+- [x] T068 [P] Tạo deployment documentation
+- [x] T069 [P] Verify quickstart.md workflows hoạt động đúng
+- [x] T070 [P] Performance optimization và cleanup
+- [x] T071 [P] Security review và hardening
 
 ---
 
